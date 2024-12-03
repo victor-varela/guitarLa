@@ -22,21 +22,20 @@ function App() {
         setCart(updatedCart));
   };
 
+  //Remove elements from cart
+  const removeFromCart = (id) => {
+    setCart((pervCart) => pervCart.filter((guitar) => guitar.id !== id));
+  };
+
   return (
     <>
-      <Header
-        cart={cart}
-      />
+      <Header cart={cart} removeFromCart={removeFromCart} />
       <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>
 
         <div className="row mt-5">
           {data.map((guitar) => (
-            <Guitar 
-              key={guitar.id} 
-              guitar={guitar} 
-              addToCart={addToCart} 
-            />
+            <Guitar key={guitar.id} guitar={guitar} addToCart={addToCart} />
           ))}
         </div>
       </main>
