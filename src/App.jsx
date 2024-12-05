@@ -10,6 +10,8 @@ function App() {
     setData(db);
   }, []);
 
+  const MAX_ITEMS = 5;
+
   const addToCart = (item) => {
     const itemExists = cart.findIndex((el) => item.id === el.id);
     const updatedCart = [...cart];
@@ -27,9 +29,43 @@ function App() {
     setCart((pervCart) => pervCart.filter((guitar) => guitar.id !== id));
   };
 
+  //Increase elements from cart
+  const increaseElements = (id) => {
+    const updatedCart = cart.map((item) => {
+      if (item.id == id && item.quantity < MAX_ITEMS) {
+        //creamos un nuevo objeto item con lo previo y modificamos la propiedad cantidad
+        return {
+          ...item,
+          quantity: item.quantity + 1,
+        };
+      }
+      return item;
+    });
+    setCart(updatedCart);
+  };
+
+  //Decrease Elements
+  const decreaseElements = (id) => {
+    const updatedCart = cart.map((item) => {
+      if (item.id === id && item.quantity > 0) {
+        return {
+          ...item,
+          quantity: item.quantity - 1,
+        };
+      }
+      return item;
+    });
+    setCart(updatedCart);
+  };
+
   return (
     <>
-      <Header cart={cart} removeFromCart={removeFromCart} />
+      <Header
+        cart={cart}
+        removeFromCart={removeFromCart}
+        increaseElements={increaseElements}
+        decreaseElements={decreaseElements}
+      />
       <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>
 

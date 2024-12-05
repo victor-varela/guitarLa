@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import React from "react";
 
-const Header = ({ cart, removeFromCart }) => {
+const Header = ({ cart, removeFromCart, increaseElements, decreaseElements }) => {
   //State derivado: sacamos logica del template. El valor de la funcion lo evalua en el ternario del template
   const isEmpty = useMemo( () => cart.length === 0, [cart] );
   const cartTotal = useMemo( ()=> cart.reduce( (total, item)=> total + (item.quantity * item.price), 0), [cart] );
@@ -55,11 +55,19 @@ const Header = ({ cart, removeFromCart }) => {
                             <td>{guitar.name}</td>
                             <td className="fw-bold">${guitar.price}</td>
                             <td className="flex align-items-start gap-4">
-                              <button type="button" className="btn btn-dark">
+                              <button 
+                                type="button" 
+                                className="btn btn-dark"
+                                onClick={()=>decreaseElements(guitar.id)}
+                              >
                                 -
                               </button>
                               {guitar.quantity}
-                              <button type="button" className="btn btn-dark">
+                              <button 
+                              type="button" 
+                              className="btn btn-dark"
+                              onClick={()=>increaseElements(guitar.id)}
+                              >
                                 +
                               </button>
                             </td>
