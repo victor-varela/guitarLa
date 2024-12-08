@@ -11,17 +11,23 @@ function App() {
   }, []);
 
   const MAX_ITEMS = 5;
+  const MIN_ITEMS = 1;
 
   const addToCart = (item) => {
     const itemExists = cart.findIndex((el) => item.id === el.id);
-    const updatedCart = [...cart];
-    itemExists === -1
-      ? (console.log("agregando..."),
-        (item.quantity = 1),
-        setCart([...cart, item]))
-      : (console.log("ya existe..."),
-        updatedCart[itemExists].quantity++,
-        setCart(updatedCart));
+    if (itemExists === -1) {
+      //agregamos al carrito
+      item.quantity = 1;
+      setCart([...cart, item]);
+    } else {
+      const updatedCart = [...cart];
+
+      //actualizamos el carrito
+      if (updatedCart[itemExists].quantity >= MAX_ITEMS) return;
+
+      updatedCart[itemExists].quantity++;
+      setCart(updatedCart);
+    }
   };
 
   //Remove elements from cart
@@ -47,7 +53,7 @@ function App() {
   //Decrease Elements
   const decreaseElements = (id) => {
     const updatedCart = cart.map((item) => {
-      if (item.id === id && item.quantity > 0) {
+      if (item.id === id && item.quantity > MIN_ITEMS) {
         return {
           ...item,
           quantity: item.quantity - 1,
@@ -58,6 +64,8 @@ function App() {
     setCart(updatedCart);
   };
 
+  const clearCart = ()=> setCart([])
+
   return (
     <>
       <Header
@@ -65,6 +73,7 @@ function App() {
         removeFromCart={removeFromCart}
         increaseElements={increaseElements}
         decreaseElements={decreaseElements}
+        clearCart={clearCart}
       />
       <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>

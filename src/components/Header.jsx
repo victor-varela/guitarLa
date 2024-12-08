@@ -1,14 +1,22 @@
 import { useMemo } from "react";
 import React from "react";
 
-const Header = ({ cart, removeFromCart, increaseElements, decreaseElements }) => {
+const Header = ({
+  cart,
+  removeFromCart,
+  increaseElements,
+  decreaseElements,
+  clearCart
+}) => {
   //State derivado: sacamos logica del template. El valor de la funcion lo evalua en el ternario del template
-  const isEmpty = useMemo( () => cart.length === 0, [cart] );
-  const cartTotal = useMemo( ()=> cart.reduce( (total, item)=> total + (item.quantity * item.price), 0), [cart] );
+  const isEmpty = useMemo(() => cart.length === 0, [cart]);
+  const cartTotal = useMemo(
+    () => cart.reduce((total, item) => total + item.quantity * item.price, 0),
+    [cart]
+  );
+
 
   //UseMemo se usa para mejorar el perfomance de la app. Evita tener que llamar a una funcion cada vez que se monta la app como en el caso actual de isEmpty() y CartTotal(). Cuando usamos useMemo ya no mandamos llamar a las funciones dentro del template sino que se ejecutan segun el array de dependencias (deps)
-  
-
 
   return (
     <header className="py-5 header">
@@ -55,27 +63,27 @@ const Header = ({ cart, removeFromCart, increaseElements, decreaseElements }) =>
                             <td>{guitar.name}</td>
                             <td className="fw-bold">${guitar.price}</td>
                             <td className="flex align-items-start gap-4">
-                              <button 
-                                type="button" 
+                              <button
+                                type="button"
                                 className="btn btn-dark"
-                                onClick={()=>decreaseElements(guitar.id)}
+                                onClick={() => decreaseElements(guitar.id)}
                               >
                                 -
                               </button>
                               {guitar.quantity}
-                              <button 
-                              type="button" 
-                              className="btn btn-dark"
-                              onClick={()=>increaseElements(guitar.id)}
+                              <button
+                                type="button"
+                                className="btn btn-dark"
+                                onClick={() => increaseElements(guitar.id)}
                               >
                                 +
                               </button>
                             </td>
                             <td>
-                              <button 
-                                className="btn btn-danger" 
+                              <button
+                                className="btn btn-danger"
                                 type="button"
-                                onClick={()=>removeFromCart(guitar.id)}
+                                onClick={() => removeFromCart(guitar.id)}
                               >
                                 X
                               </button>
@@ -92,7 +100,10 @@ const Header = ({ cart, removeFromCart, increaseElements, decreaseElements }) =>
                 {isEmpty ? (
                   <p className="text-center carrito__p">Empieza a Comprar</p>
                 ) : (
-                  <button className="btn btn-dark w-100 mt-3 p-2">
+                  <button
+                    className="btn btn-dark w-100 mt-3 p-2"
+                    onClick={clearCart}
+                  >
                     Vaciar Carrito
                   </button>
                 )}
