@@ -1,20 +1,10 @@
 import { useMemo } from "react";
 import React from "react";
 
-const Header = ({
-  cart,
-  removeFromCart,
-  increaseElements,
-  decreaseElements,
-  clearCart
-}) => {
+const Header = ({ cart, removeFromCart, increaseElements, decreaseElements, clearCart }) => {
   //State derivado: sacamos logica del template. El valor de la funcion lo evalua en el ternario del template
   const isEmpty = useMemo(() => cart.length === 0, [cart]);
-  const cartTotal = useMemo(
-    () => cart.reduce((total, item) => total + item.quantity * item.price, 0),
-    [cart]
-  );
-
+  const cartTotal = useMemo(() => cart.reduce((total, item) => total + item.quantity * item.price, 0), [cart]);
 
   //UseMemo se usa para mejorar el perfomance de la app. Evita tener que llamar a una funcion cada vez que se monta la app como en el caso actual de isEmpty() y CartTotal(). Cuando usamos useMemo ya no mandamos llamar a las funciones dentro del template sino que se ejecutan segun el array de dependencias (deps)
 
@@ -29,11 +19,7 @@ const Header = ({
           </div>
           <nav className="col-md-6 a mt-5 d-flex align-items-start justify-content-end">
             <div className="carrito">
-              <img
-                className="img-fluid"
-                src="img/carrito.png"
-                alt="imagen carrito"
-              />
+              <img className="img-fluid" src="img/carrito.png" alt="imagen carrito" />
 
               <div id="carrito" className="bg-white p-3">
                 {isEmpty ? (
@@ -51,14 +37,10 @@ const Header = ({
                         </tr>
                       </thead>
                       <tbody>
-                        {cart.map((guitar) => (
+                        {cart.map(guitar => (
                           <tr key={guitar.id}>
                             <td>
-                              <img
-                                className="img-fluid"
-                                src={`img/${guitar.image}.jpg`}
-                                alt="imagen guitarra"
-                              />
+                              <img className="img-fluid" src={`img/${guitar.image}.jpg`} alt="imagen guitarra" />
                             </td>
                             <td>{guitar.name}</td>
                             <td className="fw-bold">${guitar.price}</td>
@@ -100,10 +82,7 @@ const Header = ({
                 {isEmpty ? (
                   <p className="text-center carrito__p">Empieza a Comprar</p>
                 ) : (
-                  <button
-                    className="btn btn-dark w-100 mt-3 p-2"
-                    onClick={clearCart}
-                  >
+                  <button className="btn btn-dark w-100 mt-3 p-2" onClick={clearCart}>
                     Vaciar Carrito
                   </button>
                 )}

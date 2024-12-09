@@ -3,8 +3,14 @@ import Guitar from "./components/Guitar";
 import Header from "./components/Header";
 import { db } from "./data/db";
 function App() {
+  const inicialCart = () => {
+    const localStorageCart = localStorage.getItem("cart");
+     return localStorageCart ? JSON.parse(localStorageCart) : [];
+  };
+  
   const [data, setData] = useState([]);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(inicialCart); //si hay algo en localStorage entonces ese es el valor inicial sino entonces es un arreglo vacio
+  
 
   useEffect(() => {
     setData(db);
@@ -13,8 +19,12 @@ function App() {
   const MAX_ITEMS = 5;
   const MIN_ITEMS = 1;
 
-  const addToCart = (item) => {
-    const itemExists = cart.findIndex((el) => item.id === el.id);
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
+  const addToCart = item => {
+    const itemExists = cart.findIndex(el => item.id === el.id);
     if (itemExists === -1) {
       //agregamos al carrito
       item.quantity = 1;
@@ -31,13 +41,13 @@ function App() {
   };
 
   //Remove elements from cart
-  const removeFromCart = (id) => {
-    setCart((pervCart) => pervCart.filter((guitar) => guitar.id !== id));
+  const removeFromCart = id => {
+    setCart(pervCart => pervCart.filter(guitar => guitar.id !== id));
   };
 
   //Increase elements from cart
-  const increaseElements = (id) => {
-    const updatedCart = cart.map((item) => {
+  const increaseElements = id => {
+    const updatedCart = cart.map(item => {
       if (item.id == id && item.quantity < MAX_ITEMS) {
         //creamos un nuevo objeto item con lo previo y modificamos la propiedad cantidad
         return {
@@ -51,8 +61,8 @@ function App() {
   };
 
   //Decrease Elements
-  const decreaseElements = (id) => {
-    const updatedCart = cart.map((item) => {
+  const decreaseElements = id => {
+    const updatedCart = cart.map(item => {
       if (item.id === id && item.quantity > MIN_ITEMS) {
         return {
           ...item,
@@ -64,7 +74,7 @@ function App() {
     setCart(updatedCart);
   };
 
-  const clearCart = ()=> setCart([])
+  const clearCart = () => setCart([]);
 
   return (
     <>
@@ -79,7 +89,7 @@ function App() {
         <h2 className="text-center">Nuestra Colección</h2>
 
         <div className="row mt-5">
-          {data.map((guitar) => (
+          {data.map(guitar => (
             <Guitar key={guitar.id} guitar={guitar} addToCart={addToCart} />
           ))}
         </div>
@@ -87,9 +97,7 @@ function App() {
 
       <footer className="bg-dark mt-5 py-5">
         <div className="container-xl">
-          <p className="text-white text-center fs-4 mt-4 m-md-0">
-            GuitarLA - Todos los derechos Reservados
-          </p>
+          <p className="text-white text-center fs-4 mt-4 m-md-0">GuitarLA - Todos los derechos Reservados</p>
         </div>
       </footer>
     </>
